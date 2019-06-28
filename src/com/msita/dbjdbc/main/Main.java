@@ -8,22 +8,23 @@ import com.msita.dbjdbc.dao.UserDAO;
 public class Main {
 
 	public static void main(String[] args) {
+		
+		
+		UserDAO userDao = new UserDAO();
+		
+		// insert new user into database.
 		User newUser = new User();
 		newUser.setUserName("thong100T");
 		newUser.setPassword("thongpass");
 		newUser.setAge(57);
+		newUser = userDao.addUser(newUser);	
 		
-		UserDAO userDao = new UserDAO();
+		// get all user in database.
 		
-//		ArrayList<User> userList = userDao.getAllUser();
-//		System.out.println("size: " + userList.size());
+		ArrayList<User> userList = userDao.getAllUser();
+		System.out.println("size: " + userList.size());
 		
-		newUser = userDao.addUser(newUser);
 		
-		System.out.println("Id: " + newUser.getId());
-		System.out.println("UserName: " + newUser.getUserName());
-		System.out.println("PassWord: " + newUser.getPassword());
-		System.out.println("Age " + newUser.getAge());
 	}
 
 }
