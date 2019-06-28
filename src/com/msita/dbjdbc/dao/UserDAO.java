@@ -13,7 +13,8 @@ public class UserDAO {
 	
 	public ArrayList<User> getAllUser(){
 		ArrayList<User> userList = new ArrayList<User>();
-		Connection connection = ConnectionFactory.getConnection();	
+		Connection connection = ConnectionFactory.getConnection();
+		
 		try {
 			Statement statement = connection.createStatement();
 			ResultSet resultSet = statement.executeQuery("SELECT * FROM user");

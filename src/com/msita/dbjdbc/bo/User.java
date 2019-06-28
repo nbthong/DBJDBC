@@ -1,6 +1,3 @@
-/**
- * 
- */
 package com.msita.dbjdbc.bo;
 
 /**

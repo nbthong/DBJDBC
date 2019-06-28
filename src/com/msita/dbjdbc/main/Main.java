@@ -14,7 +14,7 @@ public class Main {
 		
 		// insert new user into database.
 		User newUser = new User();
-		newUser.setUserName("thong100T");
+		newUser.setUserName("thongAxon");
 		newUser.setPassword("thongpass");
 		newUser.setAge(57);
 		newUser = userDao.addUser(newUser);	
