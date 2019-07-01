@@ -12,52 +12,167 @@ import com.msita.dbjdbc.utils.ConnectionFactory;
 public class UserDAO {
 	
 	public ArrayList<User> getAllUser(){
+		Connection connection = null;
+		Statement statement = null;
+		ResultSet resultSet = null;
 		ArrayList<User> userList = new ArrayList<User>();
-		Connection connection = ConnectionFactory.getConnection();
 		
 		try {
-			Statement statement = connection.createStatement();
-			ResultSet resultSet = statement.executeQuery("SELECT * FROM user");
+			connection = ConnectionFactory.getConnection();
+			statement = connection.createStatement();
+			resultSet = statement.executeQuery("SELECT * FROM user");
 			while (resultSet.next()) {
 				userList.add(convertToUser(resultSet));
 			}
 		} catch (SQLException e) {
+			//Handle errors for JDBC
 			e.printStackTrace();
+		} finally {
+			//finally block used to close resources
+	        if (resultSet != null) {
+                try {
+					resultSet.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+            }
+
+            if (statement != null) {
+            	try {
+            		statement.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+            }
+
+            if (connection != null) {
+            	try {
+					connection.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+            }
 		}
 		
 		return userList;
 	}
-	public User addUser(User user){
-		Connection connection = ConnectionFactory.getConnection();	
+	
+	public void addUser(User user){
+		Connection connection = null;
+		Statement statement = null;
+		String insertSQL = "INSERT INTO user (username,password,age) VALUES ('"+ user.getUserName()+ "','"+ user.getPassword() + "','"+ user.getAge() + "')";
+		System.out.println(insertSQL);
+		try {
+			connection = ConnectionFactory.getConnection();
+			statement = connection.createStatement();
+			statement.executeUpdate(insertSQL);    
+		} catch (SQLException e) {
+			//Handle errors for JDBC
+			e.printStackTrace();
+		} finally {
+			//finally block used to close resources
+			if (statement != null) {
+            	try {
+					statement.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+            }
+            if (connection != null) {
+            	try {
+					connection.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+            }
+		}
+	}
+	
+	public void addUserViaPreparedStatement(User user){
+		Connection connection = null;
+		PreparedStatement preparedStatement = null;
+		String insertSQL = "INSERT INTO user (username,password,age) VALUES (?,?,?)";
+		try {
+			connection = ConnectionFactory.getConnection();	
+			preparedStatement = connection.prepareStatement(insertSQL);
+			preparedStatement.setString(1, user.getUserName());
+			preparedStatement.setString(2, user.getPassword());
+			preparedStatement.setInt(3, user.getAge());
+			preparedStatement.executeUpdate();
+	        
+		} catch (SQLException e) {
+			//Handle errors for JDBC
+			e.printStackTrace();
+		} finally {
+			//finally block used to close resources
+            if (preparedStatement != null) {
+            	try {
+					preparedStatement.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+            }
+
+            if (connection != null) {
+            	try {
+					connection.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+            }
+		}
+	}
+	
+	
+	public User addUserViaPreparedStatementReturnId(User user){
+		Connection connection = null;
+		PreparedStatement preparedStatement = null;
+		ResultSet resultSet = null;
 		String insertSQL = "INSERT INTO user (username,password,age) VALUES (?,?,?)";
 		String[] returnId = { "ID" };
 		try {
-			PreparedStatement preparedStatement = connection.prepareStatement(insertSQL, returnId);
+			connection = ConnectionFactory.getConnection();	
+			preparedStatement = connection.prepareStatement(insertSQL, returnId);
 			preparedStatement.setString(1, user.getUserName());
 			preparedStatement.setString(2, user.getPassword());
 			preparedStatement.setInt(3, user.getAge());
 			preparedStatement.executeUpdate();
 			
-	        ResultSet resultSet = preparedStatement.getGeneratedKeys();
+	        resultSet = preparedStatement.getGeneratedKeys();
 	        
 	        if (resultSet.next()) {
-	        	user.setId(resultSet.getInt(1));
-	        }
+				user.setId(resultSet.getInt(1));
+			}
 	        
+		} catch (SQLException e) {
+			//Handle errors for JDBC
+			e.printStackTrace();
+		} finally {
+			//finally block used to close resources
 	        if (resultSet != null) {
-                resultSet.close();
+                try {
+					resultSet.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
             }
 
             if (preparedStatement != null) {
-            	preparedStatement.close();
+            	try {
+					preparedStatement.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
             }
 
             if (connection != null) {
-            	connection.close();
+            	try {
+					connection.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
             }
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} 
+		}
 		return user;
 	}
 	
