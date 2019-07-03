@@ -10,7 +10,9 @@ import com.msita.dbjdbc.bo.User;
 import com.msita.dbjdbc.utils.ConnectionFactory;
 
 public class UserDAO {
-	
+	public ArrayList<User> findUserByUsername(String username){
+		return new ArrayList<User>();
+	}
 	public ArrayList<User> getAllUser(){
 		Connection connection = null;
 		Statement statement = null;
