@@ -3,10 +3,6 @@ package com.msita.dbjdbc.utils;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-/**
- * Connect to Database
- * @author hany.said
- */
 
 /**
  * @author nbthong
