@@ -22,7 +22,7 @@ public class Main {
 			
 			// tìm user bằng username vừa nhập
 			ArrayList<User> userList = userDao.findUserByUsername(username);
-			// TODO
+			
 			
 			// Nếu không tìm thấy: nhập vào các thông tin cần thiết và tạo mới một user và insert vào Database
 			if(userList.size() == 0) {
@@ -42,36 +42,52 @@ public class Main {
 				
 				User newUser = new User();
 				// set dữ liệu cho newUser
-				// TODO
+				newUser.setUserName(newUsername);
+				newUser.setPassword(newPassword);
+				newUser.setAge(newAge);
 				
 				// Gọi userDAO để thêm mới một user vào database
-				// TODO
-				System.out.println("Insert successfully!");
+				boolean result = userDao.addUser(newUser);
+				if (result) {
+					System.out.println("Insert successfully!");
+				} else {
+					System.out.println("Insert failed!");
+				}
 			}
+				
 			
 			// Nếu chỉ có 1 user: thì nhập password mới từ bàn phím và update password cho user trong database.
 			if(userList.size() == 1) {
-				// Hiển thị kết quả của user tìm được: id - username - password - age
-				// TODO
+				// Hiển thị kết quả
+				UserUtils.displayUserList(userList);
 				
 				// Nhập password mới
 				System.out.print("Enter new password: ");
 				String newPassword = scanner.nextLine();
 				
 				// Gọi userDAO để cập nhật password mới cho user
-				// TODO
+				boolean result = userDao.updateUserPassword(userList.get(0).getId(), newPassword);
 				
-				System.out.println("Update successfully!");
+				if (result) {
+					System.out.println("Update successfully!");
+				} else {
+					System.out.println("Update failed!");
+				}
 			}
 			
 			// Nếu có hơn nhiều hơn 1 user: thì xóa hết trong database chỉ giữ lại user đầu tiên.
 			if (userList.size() > 1){
-				// Hiển thị kết quả của tất cả user tìm được: id - username - password - age
-				// TODO
+				// Hiển thị kết quả
+				UserUtils.displayUserList(userList);
 				
 				// Gọi userDAO để xóa user thứ 2 đến thứ N của listUser trong database.
-				// TODO
-				System.out.println("Delete successfully!");
+				userList.remove(0);
+				boolean result = userDao.deleteUserList(userList);
+				if (result) {
+					System.out.println("Delete successfully!");
+				} else {
+					System.out.println("Delete failed!");
+				}
 			}
 			
 			// Có tiếp tục làm việc không?
